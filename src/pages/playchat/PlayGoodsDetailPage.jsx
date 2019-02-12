@@ -80,22 +80,22 @@ class PlayChatPage extends React.Component {
       })
     // });
     //获取微信签名
-    getJsSdkSign({url: window.location.href}).then(data => {
-      console.log('获取签名', data);
+    // getJsSdkSign({url: window.location.href}).then(data => {
+    //   console.log('获取签名', data);
       //微信JS-SDK的页面必须先注入配置信息
       wx.config({
-        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        appId: data.appId, // 必填，公众号的唯一标识
-        timestamp: data.timestamp, // 必填，生成签名的时间戳
-        nonceStr: data.nonceStr, // 必填，生成签名的随机串
-        signature: data.sign,// 必填，签名
-        jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: 'wxc927306abd393e97', // 必填，公众号的唯一标识
+        timestamp: '1549958145142', // 必填，生成签名的时间戳
+        nonceStr: 'YBT8EZULBWBC1X52NALV', // 必填，生成签名的随机串
+        signature: '58b35e0c2aaa012119e0b40bf31a487ea479d35b',// 必填，签名
+        jsApiList: ["chooseWXPay"] // 必填，需要使用的JS接口列表
       });
       //处理验证失败的信息
       wx.error(function (res) {
         console.log(res);
       });
-    })
+    // })
 
     let mySwiper = new Swiper('.swiper-container', {
       autoplay: true,
@@ -116,40 +116,40 @@ class PlayChatPage extends React.Component {
   }
 
   toBuy() {
-    let params = {
-      'payment': '1',
-      'orderId': '1231231u1h31238123jh',
-      'openId': 'jahdKJHDugD*87y87878DGaksdJDasd687676'
-    };
-    goPay(params).then(function (data) {
+    // let params = {
+    //   'payment': '1',
+    //   'orderId': '1231231u1h31238123jh',
+    //   'openId': 'jahdKJHDugD*87y87878DGaksdJDasd687676'
+    // };
+    // goPay(params).then(function (data) {
       wx.chooseWXPay({
-        appId: data.appId,
-        timestamp: data.currTime, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-        nonceStr: data.noticeStr, // 支付签名随机串，不长于 32 位
-        package: data.prepayId, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+        appId: "wxc927306abd393e97",
+        timestamp: "1549958889065", // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+        nonceStr: "HLGVC45WYVEWQKP5BFIU", // 支付签名随机串，不长于 32 位
+        package: "prepay_id=wx12160809018028fb5986e0321813638620", // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
         signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-        paySign: data.sign, // 支付签名
+        paySign: "5E55A9DC94D339BE8CC0E0B5E5DDD2AC", // 支付签名
         success: function (res) {
           // 支付成功后的回调函数
           Toast.info('支付成功~', 2, function () {
-            let params = {
-              'orderSn': data.sn,
-              'orderType': data.orderType,
-            };
-            wxAppPayCheck(params).then((response) => {
-              if (response == 1) {
-                that.props.history.replace({pathname: `/order/list/${orderType}`});
-                removeSessionStorage('orderObjValue');
-              } else {
-                Toast.info('查询失败~', 2)
-              }
-            }, err => {
-              alert(JSON.stringify(err))
-            })
+            // let params = {
+            //   'orderSn': data.sn,
+            //   'orderType': data.orderType,
+            // };
+            // wxAppPayCheck(params).then((response) => {
+            //   if (response == 1) {
+            //     that.props.history.replace({pathname: `/order/list/${orderType}`});
+            //     removeSessionStorage('orderObjValue');
+            //   } else {
+            //     Toast.info('查询失败~', 2)
+            //   }
+            // }, err => {
+            //   alert(JSON.stringify(err))
+            // })
           });
         }
       });
-    });
+    // });
   }
 
   hereIsBottom(e){
