@@ -113,7 +113,7 @@ const listData = {
 						"goodsEarnings":"每购买一个商品，获178.80玩呗",
 						"goodsId":69,
 						"goodsMainImg":"https://img.no1im.com/temp/931248b06ae94fd595c998f57e17d58c.jpeg",
-						"goodsPrice":"¥894+150积分",
+						"goodsPrice":"¥894",
 						"goodsTitle":"【特惠！】三件套装 ！！！中粮 新疆塔原红花籽油 物理压榨一级 口服油 480ml/瓶",
 						"goodsType":5,
 						"goodsVolume":"已售8",
@@ -150,7 +150,6 @@ class PlayChatPage extends React.Component {
 
   componentDidMount() {
     let that = this;
-    document.title = '玩客';
     // playBanner().then(function (data) {
       this.setState({
         bannerList: demoData.bannerList,
@@ -204,22 +203,7 @@ class PlayChatPage extends React.Component {
     this.setState({
       mescroll: mescrollNew
     });
-
-    let code = Util.AppApiAction({index: "21"});
-
     // that.loginByWeiChat();
-
-    if (dsBridge.call('getAppVersion', {})) {
-      that.setState({
-        isApp: true
-      });
-      that.appShare(code);
-    } else {
-      that.setState({
-        isApp: false
-      });
-      that.wxShare(code);
-    }
 
   }
 
@@ -384,11 +368,7 @@ class PlayChatPage extends React.Component {
   }
 
   goDetail(id) {
-    if (this.state.isApp) {
-      this.props.history.push({pathname: `/play/goodsdetail/${id}`});
-    } else {
-      window.location.href = `/vipmall/#/play/goodsdetail/${id}`;
-    }
+    window.location.href = `/#/play/goodsdetail/${id}`;
   }
 
   goIcon(url) {
@@ -401,94 +381,13 @@ class PlayChatPage extends React.Component {
     }
   }
 
-  // 发送短信验证码
-  sendMsg() {
-    const {isCanSend, phoneValue, sendCode}= this.state;
-    let that = this;
-    if (isCanSend) {
-      if (phoneValue == '' || !(/^1[3-9][0-9]\d{4,8}$/.test(phoneValue))) {
-        Toast.info("请输入正确的手机号码", 2);
-      } else {
-        that.setState({
-          isCanSend: false
-        });
-        that.settime(sendCode);
-
-        sendPin({"exists": "-1", "to": phoneValue, "way": "1"}).then(function (data) {
-          Toast.info("短信已发送", 2);
-        });
-      }
-    }
-  }
-
-  //发送验证码倒计时
-  settime(obj) {
-    let {countdown}= this.state;
-    let that = this;
-    if (countdown == 0) {
-      that.setState({
-        isCanSend: true,
-        sendCode: '获取验证码',
-        countdown: 60
-      });
-      return;
-    } else {
-      countdown--;
-      that.setState({
-        sendCode: `${countdown}s后重发`,
-        countdown
-      });
-    }
-    setTimeout(function () {
-      that.settime(obj, countdown);
-    }, 1000)
-  }
-
-  //绑定手机号
-  bindPhone() {
-    const {phoneValue, codeValue}= this.state;
-    if (phoneValue == '' || !(/^1[3-9][0-9]\d{4,8}$/.test(phoneValue))) {
-      Toast.info("请输入正确的手机号码", 2);
-    } else if (codeValue == '') {
-      Toast.info("请输入验证码", 2);
-    } else {
-      wechatMobile({"code": codeValue, "mobile": phoneValue}).then((data) => {
-        setSessionStorage('dyyp_isBind', '1');
-        Toast.info("绑定成功", 2);
-        removeSessionStorage('dyyp_openid');
-        removeSessionStorage('dyyp_token');
-        removeSessionStorage('dyyp_userid');
-        removeSessionStorage('dyyp_inviteCode');
-        removeSessionStorage('dyyp_isBind');
-        window.location.href = window.location.origin+'/vipmall';
-      }, err => {
-        Toast.info(err.message, 2);
-      });
-    }
-  }
-
-  changeValue(e, type) {
-    switch (type) {
-      case 'phone':
-        this.setState({
-          phoneValue: e.target.value
-        });
-        break;
-      case 'code':
-        this.setState({
-          codeValue: e.target.value
-        });
-        break;
-    }
-  }
-
   render() {
-    const {bannerList, iconList, goodsList, isApp, isBind, phoneValue, codeValue, sendCode} = this.state;
+    const {bannerList, iconList, goodsList, isBind, phoneValue, codeValue, sendCode} = this.state;
     return (
       <div className="play-chat-warp" style={{'height': this.state.height}}>
         <div id="mescrollid">
           <div id="mescroll" className="mescroll inner" ref="mescroll"
-               style={{'position': 'fixed', 'top': '0', 'height': this.state.height, 'bottom': '0px', 'left': '0px'}}>
+            style={{'position': 'fixed', 'top': '0', 'height': this.state.height, 'bottom': '0px', 'left': '0px'}}>
             <div className="banner">
               <div className="swiper-container">
                 <div className="swiper-wrapper">
@@ -576,43 +475,6 @@ class PlayChatPage extends React.Component {
             </div>
           </div>
         </div>
-        {
-          !isApp && <div className="right-icon" onClick={() => {
-            window.location.href = '/vipmall/#/play/center'
-          }}><a><img src={index_right_icon}/></a></div>
-        }
-        {
-          isBind == 0 && <div className="black" style={{height: this.state.height}}></div>
-        }
-        {
-          isBind == 0 && <div className="phone-bind" style={{height: this.state.height}}>
-            <section className="bindphone-popup">
-              <div className="popup-content-wrap">
-                <p className="title">绑定手机号</p>
-                <div className="phone-wrap">
-                  <input className="input-phone" type="tel" placeholder="请输入手机号" value={phoneValue}
-                         onChange={(e) => {
-                           this.changeValue(e, 'phone')
-                         }}
-                  />
-                  <span className="send-code" onClick={() => {
-                    this.sendMsg()
-                  }}>{sendCode}</span>
-                </div>
-                <div className="code-wrap">
-                  <input className="phone-code" maxLength="4" type="tel" placeholder="请输入验证码" value={codeValue}
-                         onChange={(e) => {
-                           this.changeValue(e, 'code')
-                         }}
-                  />
-                </div>
-                <p className="sure-bind" onClick={() => {
-                  this.bindPhone()
-                }}>确认绑定</p>
-              </div>
-            </section>
-          </div>
-        }
       </div>
     )
   }
