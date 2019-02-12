@@ -1,0 +1,95 @@
+.home-viewport{
+  padding-bottom: 60px;
+  background:linear-gradient(90deg,rgba(241,51,199,1) 4%,rgba(254,89,88,1) 55%,rgba(255,218,168,1) 100%);
+  .banner{
+    line-height: 0;
+    img{
+      width: 100%;
+    }
+  }
+  h2{
+    font-size: 30px;
+    font-weight: normal;
+    color: #fff;
+    margin: 30px auto;
+    text-align: center;
+  }
+  .show-swiper {
+    .swiper-slide {
+    	width: 395px;
+      &:last-child {
+      	width: 95px;
+      	color: #fff;
+        .icon {
+        	width: 32px;
+        	height: 32px;
+        	background: url('./images/more-icon.png') no-repeat center 50%/100% 100%;
+        	display: block;
+        	float: left;
+        	margin-top: 260px;
+        	margin-left: 5px;
+        }
+        .text {
+        	width: 21px;
+        	font-size: 21px;
+        	margin-top: 180px;
+        	margin-left: 10px;
+        	line-height: 1.5;
+        	float: left;
+        }
+      }
+      .goods {
+        box-sizing: border-box;
+        border-radius: 20px;
+      	width: 375px;
+      	height: 450px;
+      	margin: 40px 0;
+      	border-radius: 8px;
+      	background: #fff;
+        box-shadow:4px 4px 10px rgba(0,0,0,.4);
+        .goods-pic{
+          line-height: 0;
+          img{
+            width: 100%;
+            height: 309px;
+            border-top-right-radius: 8px;
+            border-top-left-radius: 8px;
+          }
+        }
+        .goods-text{
+          padding: 0 35px 30px;
+          p{
+            margin: 0;
+            margin-top: 10px;
+            line-height: 30px;
+            &:first-child{
+              -webkit-line-clamp: 2;
+              overflow: hidden;
+              height: 60px;
+              font-size: 24px;
+              color: #333;
+              text-overflow: -o-ellipsis-lastline;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              line-clamp: 2;
+              -webkit-box-orient: vertical;
+            }
+            &:last-child{
+              color: #FF1F48;
+              font-size: 26px;
+            }
+          }
+        }
+      }
+    }
+
+  }
+  .goods-pay{
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

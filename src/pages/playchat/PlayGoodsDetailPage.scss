@@ -1,0 +1,129 @@
+.goods-detail-warp {
+  background: white;
+  overflow-y: scroll;
+  .banner {
+    width: 100%;
+    //height: 100%;
+    .swiper-container {
+      height: 100%;
+    }
+    img {
+      width: 100%;
+      //height: 100%;
+    }
+  }
+  .goods-detail-des {
+    padding: 25px;
+    box-sizing: border-box;
+    .des {
+      font-size: 28px;
+      color: #333;
+      line-height: 36px;
+      margin: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .price {
+      margin: 0;
+      margin-top: 25px;
+      span {
+        float: left;
+        color: #F23A5C;
+        font-size: 30px;
+      }
+      i {
+        float: right;
+        font-style: normal;
+        color: #999;
+        font-size: 22px;
+      }
+    }
+  }
+  .play-chat {
+    padding: 17px 25px;
+    box-sizing: border-box;
+    border-top: 1px solid #F0F0F0;
+    border-bottom: 1px solid #F0F0F0;
+    span {
+      float: left;
+      color: #BABABA;
+      font-size: 28px;
+    }
+    i {
+      float: right;
+      font-style: normal;
+      color: #333333;
+      font-size: 28px;
+    }
+  }
+  .goods-sku {
+    display: flex;
+    padding: 30px 20px;
+    box-sizing: border-box;
+    div {
+      flex: 25%;
+      font-size: 28px;
+      color: #333;
+      text-align: center;
+    }
+  }
+  .goods-sku-list {
+    border-bottom: 1px solid #F0F0F0;
+    .list {
+      display: flex;
+      padding: 30px 20px;
+      box-sizing: border-box;
+      div {
+        flex: 25%;
+        font-size: 28px;
+        line-height: 58px;
+        color: #333;
+        text-align: center;
+      }
+      .list-click {
+        width: 178px;
+        height: 58px;
+        line-height: 58px;
+        text-align: center;
+        background: #f5f5f5;
+        border-radius: 10px;
+        color: #999;
+      }
+      .active {
+        background: #FC6C8D;
+        color: white;
+      }
+    }
+  }
+  .goods-detail {
+    .goods-detail-title {
+      margin: 20px 0;
+      width: 100%;
+      img {
+        width: 100%;
+      }
+    }
+    .detail-content {
+      padding: 0 20px;
+      box-sizing: border-box;
+      img {
+        width: 100% !important;
+      }
+    }
+  }
+  .goods-detail-button {
+    bottom: 0;
+    width: 100%;
+    height: 98px;
+    line-height: 98px;
+    text-align: center;
+    background: #F23A5C;
+    color: #FEFEFE;
+    font-size: 32px;
+    z-index: 9999;
+  }
+}
