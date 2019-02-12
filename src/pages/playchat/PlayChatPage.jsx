@@ -35,8 +35,6 @@ import './PlayChatPage.scss';
 
 import banner from './images/banner.png'
 import index_right_icon from './images/index_right_icon.png'
-import rush from './images/rush.png';
-import rush_out from './images/rush_out.png';
 
 const demoData = {
   "bannerList":[
@@ -110,14 +108,22 @@ const listData = {
 			{
 				"goodsList":[
 					{
-						"goodsEarnings":"每购买一个商品，获178.80玩呗",
 						"goodsId":69,
-						"goodsMainImg":"https://img.no1im.com/temp/931248b06ae94fd595c998f57e17d58c.jpeg",
+						"goodsMainImg":"http://img10.360buyimg.com/n1/jfs/t3715/66/1895635005/167409/c8a0c796/583408d8N807dd142.jpg",
 						"goodsPrice":"¥894",
 						"goodsTitle":"【特惠！】三件套装 ！！！中粮 新疆塔原红花籽油 物理压榨一级 口服油 480ml/瓶",
 						"goodsType":5,
 						"goodsVolume":"已售8",
-						"isSaleOut":0,
+						"saleOutPicUrl":"",
+						"salesMsgList":""
+					},
+          {
+						"goodsId":69,
+						"goodsMainImg":"http://img10.360buyimg.com/n1/jfs/t3715/66/1895635005/167409/c8a0c796/583408d8N807dd142.jpg",
+						"goodsPrice":"¥894",
+						"goodsTitle":"【特惠！】三件套装 ！！！中粮 新疆塔原红花籽油 物理压榨一级 口服油 480ml/瓶",
+						"goodsType":5,
+						"goodsVolume":"已售8",
 						"saleOutPicUrl":"",
 						"salesMsgList":""
 					}
@@ -243,26 +249,6 @@ class PlayChatPage extends React.Component {
         }
       }
     }
-  }
-
-  //app分享
-  appShare(code) {
-    let shareUrl = `${window.location.href}?pId=${code}`;
-    let selectorData = {
-      goodsName: "快来和我一起玩赚",
-      goodsImgUrl: "http://s.no1im.com/lib/imgs/wan.jpeg",
-      shareUrl: shareUrl,
-      desc: "豆丫优品玩赚你的价值，快来和我一起玩客吧"
-    };
-
-    dsBridge.call('MHSetNavInfo', {
-      'title': '玩客',
-      'rightItem': {
-        'title': '分享',
-        'nativeSelector': 'MHShareGoods:',
-        'selectorData': selectorData
-      },
-    });
   }
 
   //微信分享
@@ -423,9 +409,7 @@ class PlayChatPage extends React.Component {
               {
                 goodsList && goodsList.map((item, index) => {
                   return (
-                    <div className="goods" key={index} onClick={() => {
-                      item.isSaleOut == 0 && this.goDetail(item.goodsId)
-                    }}>
+                    <div className="goods" key={index} onClick={() => {this.goDetail(item.goodsId)}}>
                       {
                         item.salesMsgList.length > 0 && <div className="goods-top">
                           <Carousel
@@ -463,10 +447,6 @@ class PlayChatPage extends React.Component {
                             <div className="ys-title">{item.goodsVolume}</div>
                           </div>
                         </div>
-                      </div>
-                      <div className="goods-button clearfix">
-                        <span><i>赚</i><b>{item.goodsEarnings}</b></span>
-                        <a><img src={item.isSaleOut == 1 ? rush_out : rush}/></a>
                       </div>
                     </div>
                   )

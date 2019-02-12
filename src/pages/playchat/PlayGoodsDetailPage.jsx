@@ -1,20 +1,57 @@
 import React from 'react';
 import {
-  List
+  List,
+  Toast
 } from 'antd-mobile';
 import dsBridge from 'dsbridge';
 import VisibilitySensor from 'react-visibility-sensor';
 import Swiper from 'swiper/dist/js/swiper.js';
+import wx from 'weixin-js-sdk';
 import 'swiper/dist/css/swiper.min.css';
 
 import {
-  goodsDetails
+  goodsDetails,
+  getJsSdkSign,
+  goPay
 } from '../../api/playchatApi';
 
 import './PlayGoodsDetailPage.scss';
 
 import detail_title from './images/goods_detail_title.png'
-
+const detailData = {
+  "goodsCount":988,
+  "goodsDetails":"<p>123</p>",
+  "goodsId":111,
+  "goodsIntegral":150.00,
+  "goodsMainImg":"https://img.alicdn.com/tfscom/i3/357342619/O1CN01Ej841X1VDXlrm5iOj_!!0-item_pic.jpg",
+  "goodsPrice":50.00,
+  "goodsSmallImgList":[
+    "http://img10.360buyimg.com/n1/jfs/t3715/66/1895635005/167409/c8a0c796/583408d8N807dd142.jpg",
+    "http://img10.360buyimg.com/n1/jfs/t3715/66/1895635005/167409/c8a0c796/583408d8N807dd142.jpg",
+    "http://img10.360buyimg.com/n1/jfs/t3715/66/1895635005/167409/c8a0c796/583408d8N807dd142.jpg",
+    "http://img10.360buyimg.com/n1/jfs/t3715/66/1895635005/167409/c8a0c796/583408d8N807dd142.jpg"
+  ],
+  "goodsSmallImgs":"https://img.alicdn.com/tfscom/i1/357342619/O1CN01XzArUc1VDXltUIfal_!!357342619.jpg|https://img.alicdn.com/tfscom/i2/357342619/O1CN011VDXlTBG9hjLT7s_!!357342619.jpg|https://img.alicdn.com/tfscom/i3/357342619/TB2GPhNbpzqK1RjSZSgXXcpAVXa_!!357342619-2-item_pic.png|https://img.alicdn.com/tfscom/i3/357342619/O1CN011VDXlQKbMrcLd1R_!!357342619.png",
+  "goodsSpecList":[
+    {
+      "goodsId":111,
+      "returnPlayShell":5.00,
+      "specId":9480,
+      "specIntegral":150.00,
+      "specPrice":50.00,
+      "specStock":988,
+      "specValue":"红色"
+    }
+  ],
+  "goodsTitle":"马应龙八宝气垫cc霜亮肤遮瑕隔离保湿bb霜粉底液粉扑素颜学生女",
+  "goodsType":5,
+  "goodsVolume":12,
+  "isSaleOut":0,
+  "returnPlayShell":5.00,
+  "returnRatio":10,
+  "specTitle":["规格","价格","所需积分","库存"],
+  "userPlayShell":0
+};
 class PlayChatPage extends React.Component {
   constructor(props) {
     super(props);
@@ -33,21 +70,32 @@ class PlayChatPage extends React.Component {
   componentDidMount() {
     document.title = '商品详情';
     let that = this;
-    dsBridge.call('MHSetNavInfo', {
-      'title': '商品详情',
-      'rightItem': {
-        'title': ' ',
-      },
-    });
 
-    goodsDetails({goodsId: this.state.id}).then(function (data) {
+    // goodsDetails({goodsId: this.state.id}).then(function (data) {
       that.setState({
-        obj: data,
-        goodsSmallImgList: data.goodsSmallImgList,
-        specTitle: data.specTitle,
-        goodsSpecList: data.goodsSpecList,
+        obj: detailData,
+        goodsSmallImgList: detailData.goodsSmallImgList,
+        specTitle: detailData.specTitle,
+        goodsSpecList: detailData.goodsSpecList,
       })
-    });
+    // });
+    //获取微信签名
+    getJsSdkSign({url: window.location.href}).then(data => {
+      console.log('获取签名', data);
+      //微信JS-SDK的页面必须先注入配置信息
+      wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: data.appId, // 必填，公众号的唯一标识
+        timestamp: data.timestamp, // 必填，生成签名的时间戳
+        nonceStr: data.nonceStr, // 必填，生成签名的随机串
+        signature: data.sign,// 必填，签名
+        jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表
+      });
+      //处理验证失败的信息
+      wx.error(function (res) {
+        console.log(res);
+      });
+    })
 
     let mySwiper = new Swiper('.swiper-container', {
       autoplay: true,
@@ -68,10 +116,42 @@ class PlayChatPage extends React.Component {
   }
 
   toBuy() {
-    const {active, id} = this.state;
-    this.props.history.push({pathname: `/confirm/order/${id}/${active}/0`});
+    let params = {
+      'payment': '1',
+      'orderId': '1231231u1h31238123jh',
+      'openId': 'jahdKJHDugD*87y87878DGaksdJDasd687676'
+    };
+    goPay(params).then(function (data) {
+      wx.chooseWXPay({
+        appId: data.appId,
+        timestamp: data.currTime, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+        nonceStr: data.noticeStr, // 支付签名随机串，不长于 32 位
+        package: data.prepayId, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+        signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+        paySign: data.sign, // 支付签名
+        success: function (res) {
+          // 支付成功后的回调函数
+          Toast.info('支付成功~', 2, function () {
+            let params = {
+              'orderSn': data.sn,
+              'orderType': data.orderType,
+            };
+            wxAppPayCheck(params).then((response) => {
+              if (response == 1) {
+                that.props.history.replace({pathname: `/order/list/${orderType}`});
+                removeSessionStorage('orderObjValue');
+              } else {
+                Toast.info('查询失败~', 2)
+              }
+            }, err => {
+              alert(JSON.stringify(err))
+            })
+          });
+        }
+      });
+    });
   }
-  
+
   hereIsBottom(e){
     let {btnPosition} = this.state;
     if(e){

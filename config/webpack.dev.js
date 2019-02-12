@@ -4,11 +4,12 @@ const webpack = require('webpack');
 const commonConfig = require('./webpack.base.js');
 const ip = require('ip');
 
-const port = 3003;
+const port = 80;
 
 module.exports = () => webpackMerge(commonConfig(), {
   devtool: 'cheap-module-source-map',
   devServer: {
+    disableHostCheck:true,
     port,
     host: ip.address(),
     historyApiFallback: true,
@@ -23,7 +24,7 @@ module.exports = () => webpackMerge(commonConfig(), {
       },
       '/native': {
         changeOrigin: true,
-        target: 'http://192.168.60.205:9110',
+        target: 'https://www.hourmore.com',
         pathRewrite: { '^/native': '' }
       }
     }
